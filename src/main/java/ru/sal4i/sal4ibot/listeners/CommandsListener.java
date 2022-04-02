@@ -23,12 +23,13 @@ public class CommandsListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        String error = "I can't handle that command right now :(";
         if (event.getGuild() == null) {
-            event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+            event.reply(error).setEphemeral(true).queue();
             return;
         }
         if (event.getMember() == null) {
-            event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+            event.reply(error).setEphemeral(true).queue();
             return;
         }
         Button button = makeDeleteButton(event.getMember().getId());
@@ -179,7 +180,7 @@ public class CommandsListener extends ListenerAdapter {
             // The End of the Strong Shitcode
 
             default -> {
-                event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+                event.reply(error).setEphemeral(true).queue();
             }
         }
     }
