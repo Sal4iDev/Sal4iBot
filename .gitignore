@@ -20,5 +20,7 @@ out/
 *.iml
 *.ipr
 *.iws
+*.jar
 
 /src/main/resources/settings.properties
+/data

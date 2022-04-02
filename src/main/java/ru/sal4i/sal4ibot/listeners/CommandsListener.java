@@ -13,11 +13,11 @@ import ru.sal4i.sal4ibot.Bot;
 import java.awt.*;
 
 @SuppressWarnings({"RedundantLabeledSwitchRuleCodeBlock", "TextBlockMigration"})
-public class ChatListener extends ListenerAdapter {
+public class CommandsListener extends ListenerAdapter {
     private static final String DELETE_BUTTON_PREFIX = "sal4i_delete_";
     private final Bot bot;
 
-    public ChatListener(Bot bot) {
+    public CommandsListener(Bot bot) {
         this.bot = bot;
     }
 
