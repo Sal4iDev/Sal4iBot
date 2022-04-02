@@ -143,6 +143,7 @@ public class CommandsListener extends ListenerAdapter {
             case "prcp" -> {
                 event.replyEmbeds(embed(null, "Programming Concepts", "- [Variables](https://www.cs.utah.edu/~germain/PPS/Topics/variables.html)\n" + "- [Control Structures](https://towardsdatascience.com/essential-programming-control-structures-2e5e73285df4)\n" + "- [Statements vs Expressions](https://therenegadecoder.com/code/the-difference-between-statements-and-expressions/)").setColor(new Color(113, 201, 97)).build()).addActionRow(button).queue();
             }
+            // The Beginning of a Strong Shitcode
             case "toblock" -> {
                 OptionMapping optionMapping = event.getOption("javacode");
                 if (optionMapping == null) {
@@ -175,6 +176,7 @@ public class CommandsListener extends ListenerAdapter {
                 else
                     event.reply("Usage `/toblock <java code>`\n`<java code>`: Class#method#returnType\nExample: `/toblock OfflinePlayer#hasPlayedBefore#Boolean`").setEphemeral(true).queue();
             }
+            // The End of the Strong Shitcode
 
             default -> {
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
