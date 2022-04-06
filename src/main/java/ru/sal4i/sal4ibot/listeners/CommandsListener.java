@@ -157,24 +157,18 @@ public class CommandsListener extends ListenerAdapter {
                 if (option.length == 1 && option[0].contains("Event")) {
                     message = "[Event] " + formatClassName(option[0]);
                 } else if (option.length == 2) {
-                    message = String.format("[%s] %s",
-                            formatClassName(option[0]), formatLowerCamelCase(option[1]));
+                    message = String.format("[%s] %s", formatClassName(option[0]), formatLowerCamelCase(option[1]));
                 } else if (option.length == 3) {
                     String returns = option[2].trim();
                     if (returns.equalsIgnoreCase("int")) {
                         returns = "Integer";
-                    } else if (returns.equalsIgnoreCase("float")
-                            || returns.equalsIgnoreCase("double")) {
+                    } else if (returns.equalsIgnoreCase("float") || returns.equalsIgnoreCase("double")) {
                         returns = "Number";
                     } else {
                         returns = formatClassName(option[2]);
                     }
 
-                    message = String.format("[%s] %s" + ((!option[2].trim().equalsIgnoreCase("void"))
-                            ? " → (%s)" : ""),
-                            formatClassName(option[0]),
-                            formatLowerCamelCase(option[1]),
-                            formatClassName(returns));
+                    message = String.format("[%s] %s" + ((!option[2].trim().equalsIgnoreCase("void")) ? " → (%s)" : ""), formatClassName(option[0]), formatLowerCamelCase(option[1]), formatClassName(returns));
                 }
 
                 if (message != null)
