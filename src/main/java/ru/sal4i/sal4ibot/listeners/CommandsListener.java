@@ -155,21 +155,26 @@ public class CommandsListener extends ListenerAdapter {
                 String message = null;
 
                 if (option.length == 1 && option[0].contains("Event")) {
-                    message = "[Event] " + formatClassName(option[0].trim());
+                    message = "[Event] " + formatClassName(option[0]);
                 } else if (option.length == 2) {
-                    message = String.format("[%s] %s", formatClassName(option[0].trim()), formatLowerCamelCase(option[1].trim()));
+                    message = String.format("[%s] %s",
+                            formatClassName(option[0]), formatLowerCamelCase(option[1]));
                 } else if (option.length == 3) {
                     String returns = option[2].trim();
                     if (returns.equalsIgnoreCase("int")) {
                         returns = "Integer";
-                    } else if (returns.equalsIgnoreCase("float") || returns.equalsIgnoreCase("double")) {
+                    } else if (returns.equalsIgnoreCase("float")
+                            || returns.equalsIgnoreCase("double")) {
                         returns = "Number";
                     } else {
-                        returns = formatClassName(option[2].trim());
+                        returns = formatClassName(option[2]);
                     }
 
                     message = String.format("[%s] %s" + ((!option[2].trim().equalsIgnoreCase("void"))
-                            ? " → (%s)" : ""), formatClassName(option[0].trim()), formatLowerCamelCase(option[1].trim()), returns);
+                            ? " → (%s)" : ""),
+                            formatClassName(option[0]),
+                            formatLowerCamelCase(option[1]),
+                            formatClassName(returns));
                 }
 
                 if (message != null)
@@ -212,6 +217,7 @@ public class CommandsListener extends ListenerAdapter {
     }
 
     private String formatClassName(String str) {
+        str = str.trim();
         for (int i = 0; i < str.length(); i++) {
             if (Character.isUpperCase(str.charAt(i))) {
                 return str.substring(i);
@@ -222,6 +228,7 @@ public class CommandsListener extends ListenerAdapter {
     }
 
     private String formatLowerCamelCase(String str) {
+        str = str.trim();
         str = Character.toUpperCase(str.charAt(0)) + str.substring(1);
         StringBuilder builder = new StringBuilder();
 
