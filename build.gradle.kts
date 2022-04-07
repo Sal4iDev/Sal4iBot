@@ -22,6 +22,7 @@ dependencies {
     implementation("org.slf4j:slf4j-log4j12:1.7.36")
 //    implementation("org.json:json:20220320")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation("commons-io:commons-io:2.11.0")
 }
 
 tasks.withType<JavaCompile> {

@@ -2,15 +2,22 @@ package ru.sal4i.sal4ibot.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Emoji;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import ru.sal4i.sal4ibot.Bot;
+import ru.sal4i.sal4ibot.utils.Hastebin;
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings({"RedundantLabeledSwitchRuleCodeBlock", "TextBlockMigration"})
 public class CommandsListener extends ListenerAdapter {
@@ -81,7 +88,11 @@ public class CommandsListener extends ListenerAdapter {
                 event.reply("https://www.spigotmc.org/wiki/buildtools/").addActionRow(button).queue();
             }
             case "extensions" -> {
-                event.reply("<https://github.com/Sal4iDev/sVisualBukkit>").addActionRow(button).queue();
+                OptionMapping optionMapping = event.getOption("boolean");
+                if (optionMapping == null)
+                    event.reply("<https://github.com/OfficialDonut/VisualBukkitExtensions/releases>").addActionRow(button).queue();
+                else if (optionMapping.getAsBoolean())
+                    event.reply("<https://github.com/Sal4iDev/sVisualBukkit>").addActionRow(button).queue();
             }
             case "github" -> {
                 OptionMapping optionMapping = event.getOption("usernamerepo");
@@ -177,6 +188,34 @@ public class CommandsListener extends ListenerAdapter {
                     event.reply("Usage `/toblock <java code>`\n`<java code>`: Class#method#returnType\nExample: `/toblock OfflinePlayer#hasPlayedBefore#Boolean`").setEphemeral(true).queue();
             }
             // The End of the Strong Shitcode
+            case "binfile" -> {
+                OptionMapping optionMapping = event.getOption("id");
+//                OptionMapping optionMapping1 = event.getOption("raw");
+                if (optionMapping == null) {
+                    event.reply("Invalid message id").queue();
+                    break;
+                }
+//                boolean raw;
+//                if (optionMapping1 == null) raw = false;
+//                else raw = optionMapping1.getAsBoolean();
+
+                event.getChannel().retrieveMessageById(optionMapping.getAsString()).queue(message -> {
+//                    try {
+                    List<Message.Attachment> attachments = message.getAttachments();
+                    if (attachments.isEmpty()) {
+                        event.reply("Which file should i upload on paste?").setEphemeral(true).queue();
+                    } else {
+                        try {
+                            event.reply("<" + Hastebin.post(IOUtils.toString(attachments.get(0).retrieveInputStream().get(), StandardCharsets.UTF_8), /*raw*/true) + ">").addActionRow(button).queue();
+                        } catch (IOException | InterruptedException | ExecutionException e) {
+                            System.err.println(e.getMessage());
+                        }
+                    }
+//                    } catch (Exception exception) {
+//                        event.reply("There was an error!").setEphemeral(true).queue();
+//                    }
+                }, failure -> event.reply("Invalid message id").setEphemeral(true).queue());
+            }
 
             default -> {
                 event.reply(error).setEphemeral(true).queue();

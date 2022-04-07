@@ -7,6 +7,7 @@ import org.apache.log4j.PropertyConfigurator;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
+import static net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 import static net.dv8tion.jda.api.interactions.commands.build.Commands.slash;
 
@@ -30,16 +31,17 @@ public class Sal4iBot {
                             .addOptions(new OptionData(STRING, "arguments", "the arguments")),
                     slash("blockf", "VisualBukkit blocks format"),
                     slash("buildtools", "buildtools link"),
-                    slash("extensions", "Sal4iDev extensions"),
+                    slash("extensions", "Sal4iDev extensions")
+                            .addOptions(new OptionData(BOOLEAN, "boolean", "sal4i")),
                     slash("github", "Sal4iDev github")
-                            .addOptions(new OptionData(STRING, "usernamerepo", "userrepo", false)),
+                            .addOptions(new OptionData(STRING, "usernamerepo", "userrepo")),
                     slash("java", "Java tips"),
                     slash("javajs", "Java is to JavaScript as Ham is to Hamster"),
                     slash("mre", "How to create a Minimal, Reproducible Example"),
                     slash("naming", "Java naming convention"),
                     slash("nohello", "Don't say just hello in help channels"),
                     slash("notworking", "informative message")
-                            .addOptions(new OptionData(STRING, "message", "themessage", false)),
+                            .addOptions(new OptionData(STRING, "message", "themessage")),
                     slash("paste", "paste.gg"),
                     slash("rl", "why not use /reload"),
                     slash("schedule", "spigot scheduler programming"),
@@ -51,7 +53,10 @@ public class Sal4iBot {
                     slash("hashmap", "hashmap tips"),
                     slash("prcp", "programming concepts"),
                     slash("toblock", "convert java code to vb block")
-                            .addOptions(new OptionData(STRING, "javacode", "javacode", false))
+                            .addOptions(new OptionData(STRING, "javacode", "javacode")),
+                    slash("binfile", "send file to pastebin")
+                            .addOptions(new OptionData(STRING, "id", "messageid", true),
+                                    new OptionData(BOOLEAN, "boolean", "raw"))
             ).queue();
 //            commands.queue();
         } catch (LoginException | IOException e) {

@@ -1,4 +1,4 @@
-package ru.sal4i.sal4ibot.utils;
+package soon;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -8,7 +8,7 @@ public class MessagesManager {
 
     public MessagesManager() {
         try {
-            properties.load(getClass().getResourceAsStream("/messages.properties"));
+            properties.load(getClass().getResourceAsStream("/soon/messages.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
