@@ -69,7 +69,7 @@ public class CommandsListener extends ListenerAdapter {
             }
             case "admin" -> {
                 if (event.getMember() == null || event.getMember().getId().equals("923314054011965461")) {
-                    event.reply("Done!").setEphemeral(true).queue();
+                    event.reply("Done!").queue();
                     bot.getJda().shutdown();
                 } else event.reply("This command is only available to Sal4iDev!").setEphemeral(true).queue();
             }
