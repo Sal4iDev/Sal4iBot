@@ -222,7 +222,7 @@ public class CommandsListener extends ListenerAdapter {
             }
         }
     }
- 
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getMember() == null) return;
