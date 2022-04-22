@@ -56,7 +56,9 @@ public class Sal4iBot {
                             .addOptions(new OptionData(STRING, "javacode", "javacode")),
                     slash("binfile", "send file to pastebin")
                             .addOptions(new OptionData(STRING, "id", "messageid", true),
-                                    new OptionData(BOOLEAN, "boolean", "raw"))
+                                    new OptionData(BOOLEAN, "boolean", "raw")),
+                    slash("convention", "java convention"),
+                    slash("static", "java static and non static tips")
             ).queue();
 //            commands.queue();
         } catch (LoginException | IOException e) {

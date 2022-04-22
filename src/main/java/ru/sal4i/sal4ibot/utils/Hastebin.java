@@ -27,12 +27,13 @@ public class Hastebin {
         conn.setUseCaches(false);
 
         String response = null;
-        DataOutputStream wr;
+        DataOutputStream wr = null;
         try {
             wr = new DataOutputStream(conn.getOutputStream());
             wr.write(postData);
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             response = reader.readLine();
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +45,11 @@ public class Hastebin {
             response = postURL + response;
         }
 
+        conn.disconnect();
+        if (wr != null) {
+            wr.flush();
+            wr.close();
+        }
         return response;
     }
 }

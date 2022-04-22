@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import ru.sal4i.sal4ibot.listeners.CommandsListener;
+import ru.sal4i.sal4ibot.listeners.HelpChannelsListener;
 import ru.sal4i.sal4ibot.listeners.ShowcaseListener;
 
 import javax.security.auth.login.LoginException;
@@ -21,12 +22,7 @@ public class Bot {
         Properties properties = new Properties();
         properties.load(getClass().getResourceAsStream("/settings.properties"));
 
-        jda = JDABuilder.createDefault(properties.getProperty("token"))
-                .addEventListeners(
-                        new CommandsListener(this),
-                        new ShowcaseListener(this)
-                )
-                .build();
+        jda = JDABuilder.createDefault(properties.getProperty("token")).addEventListeners(new CommandsListener(this), new ShowcaseListener(/*this*/), new HelpChannelsListener()).build();
         jda.getPresence().setStatus(OnlineStatus.DO_NOT_DISTURB);
         jda.getPresence().setActivity(Activity.watching("Sal4iDev#4767"));
 

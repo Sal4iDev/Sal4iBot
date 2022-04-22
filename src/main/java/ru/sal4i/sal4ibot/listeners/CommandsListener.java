@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import ru.sal4i.sal4ibot.Bot;
@@ -30,92 +31,93 @@ public class CommandsListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        String error = "I can't handle that command right now :(";
+        ReplyCallbackAction ephemeral = event.reply("I can't handle that command right now :(").setEphemeral(true);
         if (event.getGuild() == null) {
-            event.reply(error).setEphemeral(true).queue();
+            ephemeral.queue();
             return;
         }
         if (event.getMember() == null) {
-            event.reply(error).setEphemeral(true).queue();
+            ephemeral.queue();
             return;
         }
         Button button = makeDeleteButton(event.getMember().getId());
+        ReplyCallbackAction reply = event.reply("").addActionRow(button);
 
         switch (event.getName()) {
             case "codeblock" -> {
-                event.reply("You can format your code using codeblocks! Discord supports syntax highlighting for most languages:\n" + "\n" + "\\`\\`\\`python\n" + "print(\"hello world\")\n" + "\\`\\`\\`\n" + "\n" + "This will produce\n" + "```python\n" + "print(\"hello world\")\n" + "```\n" + "\n" + "Replace 'python' with the language you're using (e.g. 'cpp' for C++;  'js' for JavaScript;  'delphi' for Delphi, etc)").addActionRow(button).queue();
+                reply.setContent("You can format your code using codeblocks! Discord supports syntax highlighting for most languages:\n" + "\n" + "\\`\\`\\`python\n" + "print(\"hello world\")\n" + "\\`\\`\\`\n" + "\n" + "This will produce\n" + "```python\n" + "print(\"hello world\")\n" + "```\n" + "\n" + "Replace 'python' with the language you're using (e.g. 'cpp' for C++;  'js' for JavaScript;  'delphi' for Delphi, etc)").queue();
             }
             case "invslots" -> {
                 OptionMapping option = event.getOption("type");
                 if (option == null) {
-                    event.reply("Usage: `/invslots <inventory_type>`").setEphemeral(true).queue();
+                    ephemeral.setContent("Usage: `/invslots <inventory_type>`").queue();
                     break;
                 }
-                event.reply("<https://wiki.vg/Inventory#" + option.getAsString().replace(' ', '_') + ">").addActionRow(button).queue();
+                reply.setContent("<https://wiki.vg/Inventory#" + option.getAsString().replace(' ', '_') + ">").queue();
             }
             case "anyone" -> {
-                event.reply("Don't ask if anyone knows XYZ, just directly ask your question/share your issue etc.").addActionRow(button).queue();
+                reply.setContent("Don't ask if anyone knows XYZ, just directly ask your question/share your issue etc.").queue();
             }
             case "ask" -> {
-                event.reply("https://dontasktoask.com/").addActionRow(button).queue();
+                reply.setContent("https://dontasktoask.com/").queue();
             }
             case "lmgt" -> {
                 OptionMapping option = event.getOption("queue");
                 if (option == null) {
-                    event.reply("Usage: `/lmgt <query>`").setEphemeral(true).queue();
+                    ephemeral.setContent("Usage: `/lmgt <query>`").queue();
                     break;
                 }
-                event.reply("<https://letmegooglethat.com/?q=" + option.getAsString().replace(' ', '+').replace("#", "%23") + ">").addActionRow(button).queue();
+                reply.setContent("<https://letmegooglethat.com/?q=" + option.getAsString().replace(' ', '+').replace("#", "%23") + ">").queue();
             }
             case "admin" -> {
                 if (event.getMember() == null || event.getMember().getId().equals("923314054011965461")) {
-                    event.reply("Done!").queue();
+                    reply.setContent("Done!").queue();
                     bot.getJda().shutdown();
-                } else event.reply("This command is only available to Sal4iDev!").setEphemeral(true).queue();
+                } else ephemeral.setContent("This command is only available to Sal4iDev!").queue();
             }
             case "beforeasking" -> {
                 OptionMapping optionMapping = event.getOption("arguments");
                 if (optionMapping == null) {
-                    event.reply("Try before asking!").addActionRow(button).queue();
+                    reply.setContent("Try before asking!").queue();
                     break;
                 }
-                event.reply(optionMapping.getAsString() + " before asking!").addActionRow(button).queue();
+                reply.setContent(optionMapping.getAsString() + " before asking!").queue();
             }
             case "blockf" -> {
-                event.reply("https://cdn.discordapp.com/attachments/954625534569091083/959520765491957760/blockf.png").addActionRow(button).queue();
+                reply.setContent("https://cdn.discordapp.com/attachments/954625534569091083/959520765491957760/blockf.png").queue();
             }
             case "buildtools" -> {
-                event.reply("https://www.spigotmc.org/wiki/buildtools/").addActionRow(button).queue();
+                reply.setContent("https://www.spigotmc.org/wiki/buildtools/").queue();
             }
             case "extensions" -> {
                 OptionMapping optionMapping = event.getOption("boolean");
                 if (optionMapping == null)
-                    event.reply("<https://github.com/OfficialDonut/VisualBukkitExtensions/releases>").addActionRow(button).queue();
+                    reply.setContent("<https://github.com/OfficialDonut/VisualBukkitExtensions/releases>").queue();
                 else if (optionMapping.getAsBoolean())
-                    event.reply("<https://github.com/Sal4iDev/sVisualBukkit>").addActionRow(button).queue();
+                    reply.setContent("<https://github.com/Sal4iDev/sVisualBukkit>").queue();
             }
             case "github" -> {
                 OptionMapping optionMapping = event.getOption("usernamerepo");
                 if (optionMapping == null) {
-                    event.reply("<https://github.com/Sal4iDev/>").addActionRow(button).queue();
+                    reply.setContent("<https://github.com/Sal4iDev/>").queue();
                     break;
                 }
-                event.reply("<https://github.com/" + optionMapping.getAsString() + ">").addActionRow(button).queue();
+                reply.setContent("<https://github.com/" + optionMapping.getAsString() + ">").queue();
             }
             case "java" -> {
-                event.reply("Major LTS Versions: **8**, **11**, **17** (Latest) | For security reasons, don't use **7** or below.\n" + "Downloads may be found underneath **Oracle **or **OpenJDK **(Recommended for newer releases)\n" + "\n" + "Java API:\n" + "<https://docs.oracle.com/en/java/javase> (Click a version, then click **API Documentation**)\n" + "\n" + "Basic Java Tutorials (Free): \n" + "<https://docs.oracle.com/javase/tutorial>\n" + "<https://w3schools.com/java> (Great for starting)\n" + "<https://baeldung.com/java-tutorial> (Great for examples)\n" + "<https://geeksforgeeks.org/java> (Great for examples)\n" + "\n" + "Java Courses: \n" + "<https://codecademy.com/learn/learn-java> (Free or Paid)\n" + "<https://jetbrains.com/academy> (Trial or Paid)\n" + "<https://java-programming.mooc.fi/> (Free)").addActionRow(button).queue();
+                reply.setContent("Major LTS Versions: **8**, **11**, **17** (Latest) | For security reasons, don't use **7** or below.\n" + "Downloads may be found underneath **Oracle **or **OpenJDK **(Recommended for newer releases)\n" + "\n" + "Java API:\n" + "<https://docs.oracle.com/en/java/javase> (Click a version, then click **API Documentation**)\n" + "\n" + "Basic Java Tutorials (Free): \n" + "<https://docs.oracle.com/javase/tutorial>\n" + "<https://w3schools.com/java> (Great for starting)\n" + "<https://baeldung.com/java-tutorial> (Great for examples)\n" + "<https://geeksforgeeks.org/java> (Great for examples)\n" + "\n" + "Java Courses: \n" + "<https://codecademy.com/learn/learn-java> (Free or Paid)\n" + "<https://jetbrains.com/academy> (Trial or Paid)\n" + "<https://java-programming.mooc.fi/> (Free)").queue();
             }
             case "javajs" -> {
-                event.reply("https://www.apollo-formation.com/wp-content/uploads/segue-blog-java-vs-javascript.png").addActionRow(button).queue();
+                reply.setContent("https://www.apollo-formation.com/wp-content/uploads/segue-blog-java-vs-javascript.png").queue();
             }
             case "mre" -> {
-                event.reply("https://stackoverflow.com/help/minimal-reproducible-example").addActionRow(button).queue();
+                reply.setContent("https://stackoverflow.com/help/minimal-reproducible-example").queue();
             }
             case "naming" -> {
-                event.reply("Java naming conventions can be found here:\n" + "<https://www.geeksforgeeks.org/java-naming-conventions/>").addActionRow(button).queue();
+                reply.setContent("Java naming conventions can be found here:\n" + "<https://www.geeksforgeeks.org/java-naming-conventions/>").queue();
             }
             case "nohello" -> {
-                event.reply("https://nohello.net/").addActionRow(button).queue();
+                reply.setContent("https://nohello.net/").queue();
             }
             case "notworking" -> {
                 OptionMapping optionMapping = event.getOption("message");
@@ -123,31 +125,31 @@ public class CommandsListener extends ListenerAdapter {
                 if (optionMapping != null) {
                     message = optionMapping.getAsString();
                 }
-                event.reply("\"" + message + "\"" + " is a useless statement. Please describe what exactly is not working, what you expect it to do, and what actually happens. If you get any console errors, also `?paste` the entire stacktrace.").addActionRow(button).queue();
+                event.reply("\"" + message + "\"" + " is a useless statement. Please describe what exactly is not working, what you expect it to do, and what actually happens. If you get any console errors, also `/paste` the entire stacktrace.").addActionRow(button).queue();
             }
             case "paste" -> {
-                event.reply("<https://paste.gg/>").addActionRow(button).queue();
+                reply.setContent("<https://paste.gg/>").queue();
             }
             case "rl" -> {
-                event.reply("https://madelinemiller.dev/blog/problem-with-reload/").addActionRow(button).queue();
+                reply.setContent("https://madelinemiller.dev/blog/problem-with-reload/").queue();
             }
             case "schedule" -> {
-                event.reply("https://www.spigotmc.org/wiki/scheduler-programming/").addActionRow(button).queue();
+                reply.setContent("https://www.spigotmc.org/wiki/scheduler-programming/").queue();
             }
             case "singleton" -> {
-                event.reply("```java\n" + "private static ClassName instance = new ClassName();\n" + "\n" + "public static ClassName getInstance() {\n" + "    return instance;\n" + "}\n" + "```\n" + "Non-static methods and variable in this class can then be accessed with `ClassName.getInstance()...`.\n" + "If you want to use this in your main class, then remove the`  = new ClassName()` part and put `instance = this;` in your `onLoad` or `onEnable`.").addActionRow(button).queue();
+                reply.setContent("```java\n" + "private static ClassName instance = new ClassName();\n" + "\n" + "public static ClassName getInstance() {\n" + "    return instance;\n" + "}\n" + "```\n" + "Non-static methods and variable in this class can then be accessed with `ClassName.getInstance()...`.\n" + "If you want to use this in your main class, then remove the`  = new ClassName()` part and put `instance = this;` in your `onLoad` or `onEnable`.").queue();
             }
             case "switch" -> {
-                event.reply("https://media.discordapp.net/attachments/954622083982327861/954772075850133603/unknown.png?width=483&height=676").addActionRow(button).queue();
+                reply.setContent("https://media.discordapp.net/attachments/954622083982327861/954772075850133603/unknown.png?width=483&height=676").queue();
             }
             case "tryitandsee" -> {
-                event.reply("https://tryitands.ee/").addActionRow(button).queue();
+                reply.setContent("https://tryitands.ee/").queue();
             }
             case "xy" -> {
-                event.reply("<https://xyproblem.info/>").addActionRow(button).queue();
+                reply.setContent("<https://xyproblem.info/>").queue();
             }
             case "equals" -> {
-                event.reply("**What is the difference between == and .equals()?**\n" + "• `==` compares whether two Objects are pointing to the same location in memory.\n" + "> For example, if you compare two `String`s with the same text, they still are two independent String instances stored at different locations and therefore `==` will return false.\n" + "• `.equals()` does what it is told to do. It entirely depends on the implementation of the class you are comparing.\n" + "> As an example the most basic form of `.equals()` defined in the Object class just checks for `==`.\n" + "• `.equals()` is usually implemented in such a way that it checks for meaningful equality. In case of a `String`, that is the text stored in it.").addActionRow(button).queue();
+                reply.setContent("**What is the difference between == and .equals()?**\n" + "• `==` compares whether two Objects are pointing to the same location in memory.\n" + "> For example, if you compare two `String`s with the same text, they still are two independent String instances stored at different locations and therefore `==` will return false.\n" + "• `.equals()` does what it is told to do. It entirely depends on the implementation of the class you are comparing.\n" + "> As an example the most basic form of `.equals()` defined in the Object class just checks for `==`.\n" + "• `.equals()` is usually implemented in such a way that it checks for meaningful equality. In case of a `String`, that is the text stored in it.").queue();
             }
             case "hashmap" -> {
                 event.replyEmbeds(embed("By CodedRed", "How HashMaps work in Java", "```java\n" + "Map<Key, Value> example = new HashMap<>();\n" + "```\n" + "HashMaps have two things a key and a value. You call the key and get the value it is holding.\n" + "key -- > value\n" + "\n" + "```java\n" + "Map<String, Integer> playersBalance = new HashMap<>();\n" + "```\n" + "\n" + "The hashmap above is a <String, Integer> meaning it will hold a string that corresponds to a certain Integer.\n" + "For example lets store player's balances in this hashmap. To do this you can do the following code:\n" + "```java\n" + "playerBalance.put(\"CodedRed\", 10000);\n" + "playerBalance.put(\"Insprill\", 5003);\n" + "playerBalance.put(\"danc\", 4665);\n" + "playerBalance.put(\"Deerjump\", 3761);\n" + "```\n" + "You can store as many different pairs of information you want in a hashmap. However, if you try to put value in with the same key name then it will overwrite the old key. Hence, you cannot have the same key names.\n" + "\n" + "key returns the value so...\n" + "Our info in the hashmap look like this:\n" + "`CodedRed --> 10000`\n" + "`Insprill --> 5003`\n" + "`danc --> 4665`\n" + "`Deerjump --> 3761`\n" + "\n" + "Say we wanted to get someone's balance:\n" + "```java\n" + "if (playerBalance.containsKey(\"CodedRed\"))\n" + "    int money = playerBalance.get(\"CodedRed\");\n" + "```\n" + "If you try to get a value with a key that doesn't exist, it will simply return `null`.").setColor(new Color(57, 203, 152)).build()).addActionRow(button).queue();
@@ -159,7 +161,7 @@ public class CommandsListener extends ListenerAdapter {
             case "toblock" -> {
                 OptionMapping optionMapping = event.getOption("javacode");
                 if (optionMapping == null) {
-                    event.reply("Usage `/toblock <java code>`\n`<java code>`: Class#method#returnType\nExample: `/toblock OfflinePlayer#hasPlayedBefore#Boolean`").setEphemeral(true).queue();
+                    ephemeral.setContent("Usage `/toblock <java code>`\n`<java code>`: Class#method#returnType\nExample: `/toblock OfflinePlayer#hasPlayedBefore#Boolean`").queue();
                     break;
                 }
                 String[] option = optionMapping.getAsString().split("#");
@@ -182,17 +184,15 @@ public class CommandsListener extends ListenerAdapter {
                     message = String.format("[%s] %s" + ((!option[2].trim().equalsIgnoreCase("void")) ? " → (%s)" : ""), formatClassName(option[0]), formatLowerCamelCase(option[1]), formatClassName(returns));
                 }
 
-                if (message != null)
-                    event.reply("Your block:\n```css\n" + message + "\n```").addActionRow(button).queue();
+                if (message != null) reply.setContent("Your block:\n```css\n" + message + "\n```").queue();
                 else
-                    event.reply("Usage `/toblock <java code>`\n`<java code>`: Class#method#returnType\nExample: `/toblock OfflinePlayer#hasPlayedBefore#Boolean`").setEphemeral(true).queue();
+                    ephemeral.setContent("Usage `/toblock <java code>`\n`<java code>`: Class#method#returnType\nExample: `/toblock OfflinePlayer#hasPlayedBefore#Boolean`").queue();
             }
-            // The End of the Strong Shitcode
             case "binfile" -> {
                 OptionMapping optionMapping = event.getOption("id");
 //                OptionMapping optionMapping1 = event.getOption("raw");
                 if (optionMapping == null) {
-                    event.reply("Invalid message id").queue();
+                    ephemeral.setContent("Invalid message id").queue();
                     break;
                 }
 //                boolean raw;
@@ -203,10 +203,10 @@ public class CommandsListener extends ListenerAdapter {
 //                    try {
                     List<Message.Attachment> attachments = message.getAttachments();
                     if (attachments.isEmpty()) {
-                        event.reply("Which file should i upload on paste?").setEphemeral(true).queue();
+                        ephemeral.setContent("Which file should i upload on paste?").queue();
                     } else {
                         try {
-                            event.reply("<" + Hastebin.post(IOUtils.toString(attachments.get(0).retrieveInputStream().get(), StandardCharsets.UTF_8), /*raw*/true) + ">").addActionRow(button).queue();
+                            reply.setContent("<" + Hastebin.post(IOUtils.toString(attachments.get(0).retrieveInputStream().get(), StandardCharsets.UTF_8), /*raw*/false) + ">").queue();
                         } catch (IOException | InterruptedException | ExecutionException e) {
                             System.err.println(e.getMessage());
                         }
@@ -214,11 +214,18 @@ public class CommandsListener extends ListenerAdapter {
 //                    } catch (Exception exception) {
 //                        event.reply("There was an error!").setEphemeral(true).queue();
 //                    }
-                }, failure -> event.reply("Invalid message id").setEphemeral(true).queue());
+                }, failure -> ephemeral.setContent("Invalid message id").queue());
+            }
+            // The End of the Strong Shitcode
+            case "convention" -> {
+                reply.setContent("https://www.oracle.com/technetwork/java/codeconventions-150003.pdf").queue();
+            }
+            case "static" -> {
+                reply.setContent("**What is the difference between static and non-static?**\n> • In Java, a method or attribute of a class can be `static` or `non-static`, the latter being the default.\n> • `static` components can be accessed from both static and non-static context. They are referenced via the class name (e. g. Integer.parseInt())\n> • `static` components are usually ones that don't have something to do with an instance of that class (e. g. utility methods or constants)\n> • `non-static` components are only accessible in a `non-static` context. They require an instance of a class. They are referenced via an instance of that class (e. g. `myList.size()`)\n**Example**\n```java\npublic class Main {\n  public static void main(String[] args) {\n    staticMethod(); //alternatively: Main.staticMethod(), this only works without it because we are inside Main\n    new Main().nonStaticMethod(); //can't call nonStaticMethod() without an instance of Main\n  }\n\n  static void staticMethod() {\n    System.out.println(\"this is a static method\");\n  }\n\n  void nonStaticMethod() {\n    System.out.println(\"this is a non-static method\"); \n  }\n}\n```").queue();
             }
 
             default -> {
-                event.reply(error).setEphemeral(true).queue();
+                ephemeral.queue();
             }
         }
     }

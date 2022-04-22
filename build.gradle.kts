@@ -9,7 +9,7 @@ application {
 }
 
 group = "ru.sal4i"
-version = "0.2-SNAPSHOT"
+version = "1.3"
 
 repositories {
     mavenCentral()
@@ -20,7 +20,6 @@ dependencies {
     implementation("net.dv8tion:JDA:5.0.0-alpha.9")
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("org.slf4j:slf4j-log4j12:1.7.36")
-//    implementation("org.json:json:20220320")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("commons-io:commons-io:2.11.0")
 }

@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import ru.sal4i.sal4ibot.Bot;
 
 import java.io.File;
 import java.io.FileReader;
@@ -18,11 +17,11 @@ import java.util.HashMap;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused", "unchecked", "ResultOfMethodCallIgnored"})
 public class ShowcaseListener extends ListenerAdapter {
-    private final Bot bot;
+    //    private final Bot bot;
     private final HashMap<String, String> cache = new HashMap<>();
 
-    public ShowcaseListener(Bot bot) {
-        this.bot = bot;
+    public ShowcaseListener(/*Bot bot*/) {
+//        this.bot = bot;
         File file;
         try {
             file = makeFile();
@@ -47,8 +46,7 @@ public class ShowcaseListener extends ListenerAdapter {
         event.getMessage().addReaction("U+1F44D").queue();
         event.getMessage().addReaction("U+1F44E").queue();
 
-        if (event.getMember() != null)
-            cache.put(event.getMessageId(), event.getMember().getId());
+        if (event.getMember() != null) cache.put(event.getMessageId(), event.getMember().getId());
     }
 
     @Override
@@ -65,9 +63,7 @@ public class ShowcaseListener extends ListenerAdapter {
         } catch (Exception exception) {
             return;
         }
-        if (event.getMember() != null
-                && cache.get(event.getMessageId()) != null
-                && cache.get(event.getMessageId()).equals(event.getMember().getId()))
+        if (event.getMember() != null && cache.get(event.getMessageId()) != null && cache.get(event.getMessageId()).equals(event.getMember().getId()))
             event.getReaction().removeReaction(event.getUser()).queue();
     }
 
