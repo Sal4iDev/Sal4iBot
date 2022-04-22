@@ -16,8 +16,7 @@ public class Sal4iBot {
         PropertyConfigurator.configure(Sal4iBot.class.getResourceAsStream("/log4j.properties"));
         try {
             JDA jda = new Bot().run();
-//            CommandListUpdateAction commands = jda.updateCommands();
-
+            
             jda.updateCommands().addCommands(
                     slash("codeblock", "codeblock"),
                     slash("invslots", "inv slots")
@@ -60,7 +59,7 @@ public class Sal4iBot {
                     slash("convention", "java convention"),
                     slash("static", "java static and non static tips")
             ).queue();
-//            commands.queue();
+
         } catch (LoginException | IOException e) {
             e.printStackTrace();
         }
