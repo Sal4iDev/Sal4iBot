@@ -13,7 +13,6 @@ version = "1.3"
 
 repositories {
     mavenCentral()
-//    maven { url = uri("https://mvnrepository.com/artifact/org.json/json") }
 }
 
 dependencies {
